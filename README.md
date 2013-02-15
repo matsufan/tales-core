@@ -37,27 +37,27 @@ Tales is design to keep updates of the data that you scrape. For instance, if a 
 
 This is very useful if you want to do regressions, some math, or see how data evolves.
 
-### [How to install Tales](wiki/Installing-Tales-on-Ubuntu-10.04-Lucid)
+### [How to install Tales](/tales-core/wiki/Installing-Tales-on-Ubuntu-10.04-Lucid)
 
-### [Tales workflow sample](wiki/Tales-workflow-sample)
+### [Tales workflow sample](/tales-core/wiki/Tales-workflow-sample)
 
-### [Template structure](wiki/About-templates)
+### [Template structure](/tales-core/wiki/About-templates)
 
-### [Pushing templates](wiki/Pushing)
+### [Pushing templates](/tales-core/wiki/Pushing)
 
-### [Config file](wiki/Config-file)
+### [Config file](/tales-core/wiki/Config-file)
 
-### [Database design](wiki/Database-design)
+### [Database design](/tales-core/wiki/Database-design)
 
-### [MongoDB and Solr](wiki/MongoDB-and-Solr)
+### [MongoDB and Solr](/tales-core/wiki/MongoDB-and-Solr)
 
-### [TalesDB updateAttribute vs addAttribute](wiki/TalesDB-updateAttribute-vs-addAttribute)
+### [TalesDB updateAttribute vs addAttribute](/tales-core/wiki/TalesDB-updateAttribute-vs-addAttribute)
 
-### [tales.templates.TemplateCommon](wiki/tales.templates.TemplateCommon)
+### [tales.templates.TemplateCommon](/tales-core/wiki/tales.templates.TemplateCommon)
 
 ### Tales Components
 
-* [tales-core services](wiki/Tales-Core-services)
-* [tales-templates](wiki/Tales-Templates)
-* [tales-dashboard](wiki/Tales-Dashboard)
-* [tales-api](wiki/Tales-API)
+* [tales-core services](/tales-core/wiki/Tales-Core-services)
+* [tales-templates](/tales-core/wiki/Tales-Templates)
+* [tales-dashboard](/tales-core/wiki/Tales-Dashboard)
+* [tales-api](/tales-core/wiki/Tales-API)
