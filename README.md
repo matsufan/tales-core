@@ -11,6 +11,8 @@ Tales currently only runs on Ubuntu 10.04 Lucid -- Tales is calling shell script
 
 Tales is simple, light, reliable, and has been tested on production environments scraping more than 200 million urls. 
 
+With Tales you can do web monitoring, research, aggregators, etc.
+
 
 ### Block tolerant
 
