@@ -7,12 +7,11 @@ Tales (http://en.wikipedia.org/wiki/Thales) is a block tolerant (IP blocking) we
 
 Tales is made in java, javascript/html and uses mysql, redis, and git.
 
-Tales currently only runs on Ubuntu 10.04 Lucid -- Tales is calling shell scripts inside the app, this needs to be replaced by a "apache licensed version of sigar".
-
 Tales is simple, light, reliable, and has been tested on production environments scraping more than 200 million urls. 
 
 With Tales you can do web monitoring, research, aggregators, etc.
 
+Tales currently only runs on Ubuntu 10.04 Lucid -- Tales is calling shell scripts inside the app, this needs to be replaced by a "apache licensed version of sigar".
 
 ### Block tolerant
 
