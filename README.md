@@ -11,6 +11,9 @@ Tales is made in java, javascript/html and uses mysql, redis, and git.
 
 Tales currently only runs on Ubuntu 10.04 Lucid -- Tales is calling shell scripts inside the app, this needs to be replaced by a "apache licensed version of sigar".
 
+Tales is simple, light, reliable, and has been tested on production environments scraping more than 200 million urls. 
+
+
 ### Block tolerant
 
 Tales is design to scrape the web continuously, even when the domain being scraped blocks the scraper server ip; it goes around this problem by fail-overing to a new node (server).
