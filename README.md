@@ -1,18 +1,17 @@
-by Carlos Chinchilla
-
 http://twitter.com/calufa
 
 http://linkedin.com/in/calufa
 
 ### About Tales
-Tales (http://en.wikipedia.org/wiki/Thales) is a block tolerant (IP blocking) web scraper that runs on top of aws and rackspace. Tales is design to be easy to deploy, configure, and manage. With Tales you can scrape 10s or even 100s of domains concurrently.
+Tales (http://en.wikipedia.org/wiki/Thales) is a block tolerant (http://en.wikipedia.org/wiki/IP_address_blocking) web scraper (http://en.wikipedia.org/wiki/Web_scraping) that runs on top of aws and rackspace. Tales is design to be easy to deploy, configure, and manage. With Tales you can scrape 10s or even 100s of domains concurrently.
 
 Tales is made in java, javascript/html and uses mysql, redis, and git.
 
-Tales currently only runs on Ubuntu 10.04 Lucid -- Tales is calling shell scripts inside the app, this needs to be replaced by a "apache licensed version of sigar".
-
 Tales is simple, light, reliable, and has been tested on production environments scraping more than 200 million urls. 
 
+With Tales you can do web monitoring, research, aggregators, etc.
+
+Tales currently only runs on Ubuntu 10.04 Lucid -- Tales is calling shell scripts inside the app, this needs to be replaced by a "apache licensed version of sigar".
 
 ### Block tolerant
 
