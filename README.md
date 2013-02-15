@@ -5,7 +5,7 @@ http://twitter.com/calufa
 http://linkedin.com/in/calufa
 
 ### About Tales
-Tales is a block tolerant (IP blocking) web scraper that runs on top of aws and rackspace. Tales is design to be easy to deploy, configure, and manage. With Tales you can scrape 10s or even 100s of domains concurrently.
+Tales (http://en.wikipedia.org/wiki/Thales) is a block tolerant (IP blocking) web scraper that runs on top of aws and rackspace. Tales is design to be easy to deploy, configure, and manage. With Tales you can scrape 10s or even 100s of domains concurrently.
 
 Tales is made in java, javascript/html and uses mysql, redis, and git.
 
