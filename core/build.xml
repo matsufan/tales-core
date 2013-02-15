@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="compile" name="tales-core">
+    
+	<property file="./conf/build.properties" />
+	
+	<!-- prepares -->
+	<target name="prepare">
+		<delete dir="build"/>
+		<mkdir dir="build"/>
+		<delete dir="dist"/>
+		<mkdir dir="dist"/>
+	</target>
+
+	<target name="compile" depends="prepare">
+		
+		<!-- from .java to .class -->
+		<javac srcdir="${src.dir}" 
+			destdir="${build.dir}" 
+			classpathref="jars" 
+			fork="yes" 
+			encoding="${charset}" 
+			deprecation="${deprecation}" 
+			optimize="${optimize}"
+			compiler="javac${jvm.version}" 
+			target="${jvm.version}"
+			source="${jvm.version}"
+			debug="${debug}"
+			includeantruntime="false" />
+		
+		<!-- external lib reference -->
+		<manifestclasspath property="compile.classpath" jarfile="${jar}" maxParentLevels="10">
+			<classpath refid="jars"/>
+		</manifestclasspath>
+		
+		<!-- builds the final jar -->
+		<jar destfile="${jar}" >
+			<fileset dir="${build.dir}">
+				<include name="**/*.class"/>
+			</fileset>
+			<manifest>
+			    <attribute name="Class-Path" value="${compile.classpath}"/>
+			</manifest>
+		</jar>
+		
+	</target>
+	
+	<!-- to create the .class file we need to make reference to the .jar dependencies -->
+	<path id="jars">
+		<fileset dir="${lib.dir}" includes="**/*.jar" erroronmissingdir="false"/>
+	</path>
+	
+</project>

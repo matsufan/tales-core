@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>	
+	<head>
+
+
+		<title>T.A.L.E.S</title>
+		<style type="text/css">
+		
+		body {
+		    font-family: Arial, Arial, Helvetica, sans-serif;
+			font-size: 12px;
+		}
+		
+		.analytics {
+			width: 50000px;
+			clear: both;
+		}
+		
+		.serverContainer {
+			float: left;
+			padding-left: 10px;
+			padding-right: 10px;
+			margin-left: 10px;
+			margin-left: 10px;
+		}
+		
+		.appContainer {
+			width: 700px;
+			float: left;
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+		
+		.errorTextfield {
+			width: 100%;
+			height: 250px;
+		}
+		
+		.logTextfield {
+			width: 100%;
+			height: 400px;
+			resize: none;
+		}
+		
+		.errors {
+			clear:left;
+		}
+		
+	</style>
+	
+	
+	</head>
+	<body>
+	
+	
+		<h1>T.A.L.E.S</h1>
+		<b>Templates branch</b>
+		<div id="branch"></div>
+		<div id="pauseBtn">
+			<h2><a href=javascript:pause()>Pause Stream</a><h2>
+		</div>
+		<hr>
+		<h2>Nodes</h2>
+		<div id="analytics" class="analytics"></div>
+		<br>
+		<div id="errors" class="errors">
+			<br>
+			<hr>
+			<h2>Errors</h2>
+			<textarea id="errorLog" wrap='off' class='errorTextfield'></textarea>
+		</div>
+	
+
+	</body>
+
+
+	<script src="/js/jquery-1.7.min.js"></script>
+	<script src="/js/jquery.WebSockets.js"></script>
+	<script type="text/javascript">
+		
+		
+		// globals
+		var port = 8080;
+		var maxLogSize = 20000;
+		var logData = [];
+		var paused = false;
+		var deadInterval = 30000;
+		var solrInterval = 5000;
+		var errorsInterval = 1000;
+		var startInterval = 1000;
+		var appsInterval = {};
+		var colors = ["B0D1A6", "D0D1A5", "FFE1A9", "FFFBA4", "EFFAB4", "FF9F80", "A8CABA"]
+		var colorIndex = 0;
+		
+		
+		jQuery.fn.exists = function(){return this.length>0;}
+		
+		
+		$(document).ready(function() {
+			
+			
+			function start(){
+			
+			
+				var location = document.location.toString().replace('http://','ws://').replace('https://', 'wss://').replace("#", "");
+				var ws = $.WebSocket(location);
+				ws.onopen = function() {};
+	            ws.onmessage = function(data) {
+                
+
+					if(!paused){
+					
+					
+						data = JSON.parse(data.data);
+				
+				
+						for(var i = 0; i < data.length; i++){
+						
+						
+							json = data[i]
+
+							var classe = getClassName(json.methodPath);
+							var pid = json.pid;	
+							var publicDNS = json.publicDNS;			
+							var serverDivName = publicDNS.split(".").join("_");
+							var appDivName = "tales_" + serverDivName + "_" + pid;
+							var process = json.process;
+
+					
+							// checks if server div exists
+							if(!$("#" + serverDivName).exists()){
+
+								$("#analytics").prepend("<div id='" + serverDivName +"' class='serverContainer'></div>");
+								$("#" + serverDivName).css("background-color", "#" + colors[colorIndex++]);
+								
+								if(colorIndex == colors.length){
+									colorIndex = 0;
+								}
+
+								// server title
+								$("#" + serverDivName).append("<hr><h2><a href=\"http://" + publicDNS + ":" + port + "\" target=\"_blank\">" + publicDNS + ":" + port + "</a> | <a href=\"#\" onclick=\"deleteServer('" + publicDNS + "')\">delete</a></h2>");	
+							
+								// stats container
+								$("#" + serverDivName).append("<div id=\"stats\"></div>");
+								
+								// server status
+								$("#" + serverDivName).find("#stats").append("<div id=\"server\"><h3>Server Info</h3></div>");
+								$("#" + serverDivName).find("#stats").find("#server").append("<div id=\"stats\"></div>");
+								
+								// solr indexes
+								$("#" + serverDivName).find("#stats").append("<div id=\"solr\"><h3>Solr Indexes</h3></div>");
+								$("#" + serverDivName).find("#stats").find("#solr").append("<div id=\"indexes\"></div><br><br>");
+								getSolrIndexes($("#" + serverDivName).find("#stats").find("#solr").find("#indexes"), publicDNS);
+						
+								// apps
+								$("#" + serverDivName).append("<div id=\"apps\"></div>");
+
+							}
+
+							
+							if(classe == "ServerMonitor"){
+								
+								
+								setServerStats($("#" + serverDivName).find("#server").find("#stats"), json.data);
+						
+						
+							}else{
+
+
+								// check if the app div exists
+								if(!$("#" + appDivName).exists()){
+
+									$("#" + serverDivName).find("#apps").prepend("<div id='" + appDivName + "' class='appContainer'></div>");
+
+									$("#" + appDivName).append("<hr />");
+									$("#" + appDivName).append("<h3>" + process + " | pid " + pid + " | <a href=\"#\" onclick=\"kill(" + pid + ", '" + publicDNS + "')\">kill</a></h3>");
+									$("#" + appDivName).append("<div id=\"custom\"></div>");
+
+									// template log
+									$("#" + appDivName).append("<h4>log</h4>");
+									$("#" + appDivName).append("<textarea id=\"templateLog\" wrap='off' class='logTextfield'></textarea>");	
+
+									// error log
+									$("#" + appDivName).append("<h4>error log</h4>");
+									$("#" + appDivName).append("<textarea id=\"errorLog\" wrap='off' class='logTextfield'></textarea>");
+
+									// full log
+									$("#" + appDivName).append("<h4>full log</h4>");
+									$("#" + appDivName).append("<textarea id=\"log\" wrap='off' class='logTextfield'></textarea>");					
+
+								}else{
+									clearTimeout(appsInterval[appDivName]);
+								}
+
+
+								setDivTimeout(appDivName);
+					
+
+								// inits the log acumm
+								if(logData[appDivName] == undefined){
+									logData[appDivName] = {};
+									logData[appDivName]["templateLog"] = "";
+									logData[appDivName]["errorLog"] = "";
+									logData[appDivName]["log"] = "";
+								}
+
+
+								// prints the log
+								header = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds() + " # " + classe + " | " + json.data;
+
+								logData[appDivName]["log"] = (header + "\n" + logData[appDivName]["log"]).substring(0, maxLogSize);;
+								$("#" + appDivName + " #log").val(logData[appDivName]["log"]);
+
+
+								// template log
+								if (classe != "AppMonitor" && classe != "TaskWorker" && classe.indexOf("Scraper") == -1 && json.data.indexOf("[ERROR START]") == -1){
+									logData[appDivName]["templateLog"] = (header + "\n" + logData[appDivName]["templateLog"]).substring(0, maxLogSize);;
+									$("#" + appDivName + " #templateLog").val(logData[appDivName]["templateLog"]);
+								}
+
+
+								// error log
+								if (json.data.indexOf("[ERROR START]") > -1){
+									logData[appDivName]["errorLog"] = (header + "\n" + logData[appDivName]["errorLog"]).substring(0, maxLogSize);
+									$("#" + appDivName + " #errorLog").val(logData[appDivName]["errorLog"]);
+								}
+
+
+								// print custom logs
+								if (classe == "AppMonitor"){
+
+									if(!$("#" + appDivName + " #custom #systemMonitor").exists()){
+										$("#" + appDivName + " #custom").append("<h4>AppMonitor</h4>");
+										$("#" + appDivName + " #custom").append("<div id=\"systemMonitor\"></div>");
+									}
+
+									if(json.data.indexOf("---------") == -1){
+										$("#" + appDivName + " #custom #systemMonitor").html(json.data);
+									}
+
+
+								} else if (classe == "TaskWorker"){
+
+									if(!$("#" + appDivName + " #custom #taskWorker").exists()){
+										$("#" + appDivName + " #custom").append("<h4>TaskWorker</h4>");	
+										$("#" + appDivName + " #custom").append("<div id=\"taskWorker\"></div>");
+									}
+
+									$("#" + appDivName + " #custom #taskWorker").html(json.data);
+
+
+								} else if (classe.indexOf("Scraper") > -1){
+
+									if(!$("#" + appDivName + " #custom #scraper").exists()){
+										$("#" + appDivName + " #custom").append("<h4>" + classe + "</h4>");	
+										$("#" + appDivName + " #custom").append("<div id=\"scraper\"></div>");
+									}
+
+									$("#" + appDivName + " #custom #scraper").html(json.data);
+
+								}
+							
+						}
+						}
+
+					}
+
+	            };
+			
+	            ws.onerror = function(e) {
+					alert("error")
+				};
+	            ws.onclose = function() {
+					setTimeout(start, startInterval);
+				};
+
+			}
+			
+			start();
+		
+		});
+		
+		
+		
+		
+		// get class name
+		function getClassName(classe){
+						
+			if(classe.indexOf("$") > -1){
+				classe = classe.split("$")[0]
+			}
+			classes = classe.split(".")
+			classe = classes[classes.length - 1]
+
+			// checks if its a method
+			if(classe[0].toUpperCase() != classe[0]){
+				classe = classes[classes.length - 2]
+			}
+			
+			return classe;
+			
+		}
+		
+		
+		
+		
+		// gets the working branch
+		$.get("/branches", function(data){
+			$("#branch").html(data);
+		});
+		
+		
+		
+		
+		// errors
+		function getErrors(){
+			
+			$.get("/errors", function(data){
+			
+				$("#errors").find("#errorLog").html("");
+
+				for(var i = 0; i < data.length; i++){
+					
+					var line = "";
+					
+					for(var j in data[i]){
+						line += "  -" + j + ": " + data[i][j];
+					}
+					
+					$("#errors").find("#errorLog").append(line + "\n");
+					
+				}
+			
+			});
+			
+			setTimeout(getErrors, errorsInterval)
+		}
+		getErrors();
+			
+			
+		
+		// pauses the stream
+		function pause(){
+			paused = !paused;
+		}
+		
+		
+		
+		
+		// removes the div of a dead app
+		function removeDeadApp(appDivName){
+			
+			if(!paused){
+						
+				// removes the server contains
+				if($("#" + appDivName).parent().children("div").length == 1){
+					$("#" + appDivName).parent().parent().remove();
+				}else{
+					$("#" + appDivName).remove();
+				}
+				
+			}else{
+				setDivTimeout(appDivName)
+			}
+			
+		}
+		
+		
+		
+		
+		// kills a process
+		function kill(pid, publicDNS){
+			if(window.confirm("Are you sure you want to kill pid: " + pid + "?")){
+				$.get("http://" + publicDNS + ":" + port + "/kill?pid=" + pid);
+			}
+		}
+		
+		
+		
+		
+		// div timeout
+		function setDivTimeout(appDivName){
+			appsInterval[appDivName] = setTimeout(removeDeadApp, deadInterval, appDivName);
+		}
+		
+		
+		
+		
+		// deletes the server
+		function deleteServer(publicDNS){
+			if(window.confirm("Are you sure you want to delete the server: " + publicDNS + "?")){
+				$.get("http://" + publicDNS + ":" + port + "/delete");
+			}
+		}
+		
+		
+		
+		
+		// gets the solr indexes
+		function getSolrIndexes(div, publicDNS){
+			
+			$.get("http://" + publicDNS + ":" + port + "/solr", function(data){
+				
+				div.html("");
+				div.append("<ul>")
+				
+				for(var i = 0; i < data.length; i++){
+					
+					for(var j in data[i]){
+						div.append("<li><a href=\"" + data[i][j] + "\" target=\"blank\">" + j  + "</a></li>")
+					}
+					
+				}
+				
+				div.append("</ul>");
+				
+			});
+			
+			setTimeout(getSolrIndexes, solrInterval, div, publicDNS);
+			
+		}
+		
+		
+		
+		// server stats
+		function setServerStats(div, json){
+		
+			div.html("");
+			div.append("<ul>");
+			div.append("<li>Uptime: " + json.uptime + "</li>");
+			div.append("<li>Memory:<br><textarea rows=\"3\" style=\"width: 400px\">" + json.memory + "</textarea></li>");
+			div.append("<li>Cpu: " + json.cpu + "</li>");
+			div.append("<li>Disk:<br><textarea rows=\"2\" style=\"width: 400px\">" + json.disk + "</textarea></li>");
+			
+		}
+		
+		
+	</script>
+
+
+</html>
