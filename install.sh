@@ -8,15 +8,24 @@ echo ""
 
 
 # asks for the user data
-read -p "1. What's your tales-core repo path, e.g. 'git@github.com:calufa/tales-core.git': " core
-read -p "2. What's your tales-templates repo path, e.g. 'git@github.com:calufa/tales-templates-sample.git': " templates
+
+echo "Note: if want to experiment with Tales, you can use the main repo 'git@github.com:calufa/tales-core.git' as the tales-core path."
+read -p "1. What's your tales-core repo path: " core
+echo ""
+echo "Note: there is a sample of tales-templates in the repo 'git@github.com:calufa/tales-templates-sample.git', this sample will get you started,"
+echo "as it contains a demo of the scraper instructions also called templates."
+read -p "2. What's your tales-templates repo path: " templates
 read -p "3. What's your github email address? " email
 read -p "4. What's your github username? " name
-read -p "5. Please specify the mysql username, e.g 'root'? " user
-
-echo "Note: if you sumitted 'git@github.com:calufa/tales-templates-sample.git' as the tales-templates repo"
-echo "then you should use the default password '123456789-ABCDED' (no quotes),"
-echo "as specified in the config file at this url https://github.com/calufa/tales-templates-sample/blob/master/environments/master.json#L30 "
+echo ""
+echo "Note: if you submitted 'git@github.com:calufa/tales-templates-sample.git' as the tales-templates repo,"
+echo "then you should use the default user (dbUsername) 'root' (no quotes),"
+echo "as specified in the config file at this url https://github.com/calufa/tales-templates-sample/blob/master/environments/master.json#L29"
+read -p "5. Please specify the mysql username? " user
+echo ""
+echo "Note: if you submitted 'git@github.com:calufa/tales-templates-sample.git' as the tales-templates repo,"
+echo "then you should use the default password (dbPassword) '123456789-ABCDED' (no quotes),"
+echo "as specified in the config file at this url https://github.com/calufa/tales-templates-sample/blob/master/environments/master.json#L30"
 read -p "6. Please specify the mysql password? " password
 
 
@@ -61,7 +70,9 @@ echo ""
 echo "Why do I need to create a private key?"
 echo ""
 echo "One of the things Tales do, is pull code changes from git and recompile itself."
-echo "Tales uses 2 repos, one for the tales-core (where the main logic lives), and the other is for the templates (scraping instructions on how to scrape a page). The most probable thing is that you are going to host tales-core and tales-templates privately. Github doesn't allow arbitrary servers to pull code from private repos without an ssh-key."
+echo "Tales uses 2 repos, one for the tales-core (where the main logic lives), and the other is for the templates (scraping instructions on how to scrape a page)."
+echo "The most probable thing is that you are going to host tales-core and tales-templates privately."
+echo "Github doesn't allow arbitrary servers to pull code from private repos without an ssh-key."
 echo ""
 while true; do
     read -p "Let me know when you are done adding the key to github by typing 'done'? " done
@@ -74,13 +85,18 @@ done
 
 # installing dependencies
 echo ""
+echo ""
+echo ""
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "Installing dependencies... this can take a while..."
 echo ""
+echo ""
 
-export DEBIAN_FRONTEND=noninteractive # prevents mysql prompt
+echo mysql-server mysql-server/root_password select $password | debconf-set-selections # prevents mysql prompt
+echo mysql-server mysql-server/root_password_again select $password | debconf-set-selections # prevents mysql prompt
+
 sudo apt-get -q -y update
-sudo apt-get -q -y install openjdk-6-jdk openjdk-6-jre-headless openjdk-6-jre-lib build-essential g++ libssl-dev git-core libxml2 libxml2-dev scons ant screen apache2 munin munin-node munin-java-plugins munin-plugins-extra curl
-sudo apt-get -q -y install mysql-server
+sudo apt-get -q -y install mysql-server openjdk-6-jdk openjdk-6-jre-headless openjdk-6-jre-lib build-essential g++ libssl-dev git-core libxml2 libxml2-dev scons ant screen apache2 munin munin-node munin-java-plugins munin-plugins-extra curl
 #redis
 cd ~ 
 wget http://redis.googlecode.com/files/redis-2.6.8.tar.gz
@@ -89,6 +105,15 @@ cd redis-2.6.8
 make
 cd ../ 
 mv redis-2.6.8 redis
+
+echo ""
+echo ""
+echo ""
+echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo "Finished installing all the dependencies."
+echo ""
+echo ""
+echo ""
 
 
 # inits git
@@ -116,14 +141,13 @@ cd tales-templates/core
 ant > /dev/null 2>&1
 
 # setting up mysql passwords
-mysql -u $user -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '"$password"' WITH GRANT OPTION; GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '"$password"' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+mysql -u $user -p$password -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '"$password"' WITH GRANT OPTION; GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '"$password"' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 
 
 # iptables
 
 echo ""
-echo "Opening socket ports."
-echo "Note: If you are running on AWS you should allow the following ports: 8080 (web), 3306 (mysql), 8983 (redis), 6379 (solr), 27017 (mongo) at 'https://console.aws.amazon.com/ec2/home?region=us-east-1#s=SecurityGroups'"
+echo "*** Note: If you are running on AWS you should allow the following ports: 8080 (web), 3306 (mysql), 8983 (redis), 6379 (solr), 27017 (mongo) at 'https://console.aws.amazon.com/ec2/home?region=us-east-1#s=SecurityGroups'"
 
 # web
 iptables -A INPUT -i eth0 -p tcp -m tcp --dport 8080 -j ACCEPT

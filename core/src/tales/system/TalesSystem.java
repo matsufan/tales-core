@@ -186,7 +186,7 @@ public class TalesSystem {
 
 
 
-	public static Instance getAWSInstanceMetadata() throws TalesException{
+	public static Instance getAWSInstanceMetadata(){
 
 		try{
 
@@ -212,16 +212,11 @@ public class TalesSystem {
 				
 			}
 
-			return null;
-
 		}catch( Exception e){
-			try{
-				throw new TalesException(new Throwable(), e);
-			}catch(Exception e1){
-				e1.printStackTrace();
-				return null;
-			}
+			new TalesException(new Throwable(), e);
 		}
+		
+		return null;
 
 	}
 
