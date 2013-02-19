@@ -103,16 +103,20 @@ public class TalesSystem {
 
 		try{
 
-			
 			// checks if its a aws server
 			try{
-				if(TalesSystem.getAWSInstanceMetadata() != null){
+				if(!Config.getAWSAccessKeyId().equals("")
+						&& !Config.getAWSSecretAccessKey().equals("")
+						&& TalesSystem.getAWSInstanceMetadata() != null){
 					return TalesSystem.getAWSInstanceMetadata().getPublicDnsName();
 				}	
-			}catch(Exception e){}
+			}catch(Exception e){
+				if(serverIP != null){
+					new TalesException(new Throwable(), e);
+				}
+			}
 
 
-			// if its not aws
 			if (serverIP == null) {
 
 				serverIP = InetAddress.getLocalHost().getHostAddress();
