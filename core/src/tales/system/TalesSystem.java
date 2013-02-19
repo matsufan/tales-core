@@ -103,6 +103,7 @@ public class TalesSystem {
 
 		try{
 
+			// checks if its a aws server
 			try{
 				if(TalesSystem.getAWSInstanceMetadata() != null){
 					return TalesSystem.getAWSInstanceMetadata().getPublicDnsName();
