@@ -215,7 +215,12 @@ public class TalesSystem {
 			return null;
 
 		}catch( Exception e){
-			throw new TalesException(new Throwable(), e);
+			try{
+				throw new TalesException(new Throwable(), e);
+			}catch(Exception e1){
+				e1.printStackTrace();
+				return null;
+			}
 		}
 
 	}
