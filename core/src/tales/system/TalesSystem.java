@@ -45,26 +45,26 @@ public class TalesSystem {
 
 
 
-	
+
 	public static float getServerCPUUsage() {
-		
+
 		long upTime = runbean.getUptime();
 		long processCpuTime = ((com.sun.management.OperatingSystemMXBean) osbean).getProcessCpuTime();
-		
+
 		if (prevUpTime > 0L && upTime > prevUpTime && processCpuTime > prevProcessCpuTime && upTime > 0L && processCpuTime > 0L) {
-			
+
 			long elapsedCpu = processCpuTime - prevProcessCpuTime;
 			long elapsedTime = upTime - prevUpTime;
 
 			float cpuUsage = Math.min(99F, elapsedCpu / (elapsedTime * 10000F * nCPUs));
 			lastResult = cpuUsage;
-			
+
 		}
-		
+
 		prevUpTime = upTime;
 		prevProcessCpuTime = processCpuTime;
 		return lastResult;
-		
+
 	}
 
 
@@ -85,15 +85,15 @@ public class TalesSystem {
 
 
 	public static int getPid() {
-		
+
 		if (pid == 0) {
 			String name = runbean.getName();
 			String[] parts = name.split("@");
 			pid = Integer.parseInt(parts[0]);
 		}
-		
+
 		return pid;
-		
+
 	}
 
 
@@ -102,15 +102,20 @@ public class TalesSystem {
 	public static String getPublicDNSName() throws TalesException{
 
 		try{
-			
-			
-			if(TalesSystem.getAWSInstanceMetadata() != null){
-				return TalesSystem.getAWSInstanceMetadata().getPublicDnsName();
+
+			Exception error = null;
+
+			try{
+				if(TalesSystem.getAWSInstanceMetadata() != null){
+					return TalesSystem.getAWSInstanceMetadata().getPublicDnsName();
+				}	
+			}catch(Exception e){
+				error = e;
 			}
-			
+
 
 			if (serverIP == null) {
-				
+
 				serverIP = InetAddress.getLocalHost().getHostAddress();
 
 				Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
@@ -118,21 +123,25 @@ public class TalesSystem {
 
 					NetworkInterface e = n.nextElement();
 					Enumeration<InetAddress> a = e.getInetAddresses();
-					
+
 					while(a.hasMoreElements()){
-						
+
 						InetAddress addr = a.nextElement();
 						String publicIP = addr.getHostAddress();
-						
+
 						if(publicIP.split("\\.").length == 4 && !publicIP.startsWith("10") && !publicIP.startsWith("127")){
 							serverIP = publicIP;
 							return serverIP;
 						}
-						
+
 					}
-					
+
 				}
-				
+
+			}
+			
+			if(error != null){
+				new TalesException(new Throwable(), error);
 			}
 
 			return serverIP;
@@ -186,36 +195,30 @@ public class TalesSystem {
 
 
 
-	public static Instance getAWSInstanceMetadata(){
+	public static Instance getAWSInstanceMetadata() throws Exception{
 
-		try{
-
-			if(instance != null){
-				return instance;
-			}
-
-			AmazonEC2 ec2 = new AmazonEC2Client(new BasicAWSCredentials(Config.getAWSAccessKeyId(), Config.getAWSSecretAccessKey()));
-
-			DescribeInstancesResult describeInstancesRequest = ec2.describeInstances();
-			List<Reservation> reservations = describeInstancesRequest.getReservations();
-
-			for(Reservation reservation : reservations) {
-
-				for(Instance instance : reservation.getInstances()){
-					
-					if(instance.getPrivateIpAddress() != null && instance.getPrivateIpAddress().equals(InetAddress.getLocalHost().getHostAddress())){
-						TalesSystem.instance = instance;
-						return instance;
-					}
-					
-				}
-				
-			}
-
-		}catch( Exception e){
-			e.printStackTrace();
+		if(instance != null){
+			return instance;
 		}
-		
+
+		AmazonEC2 ec2 = new AmazonEC2Client(new BasicAWSCredentials(Config.getAWSAccessKeyId(), Config.getAWSSecretAccessKey()));
+
+		DescribeInstancesResult describeInstancesRequest = ec2.describeInstances();
+		List<Reservation> reservations = describeInstancesRequest.getReservations();
+
+		for(Reservation reservation : reservations) {
+
+			for(Instance instance : reservation.getInstances()){
+
+				if(instance.getPrivateIpAddress() != null && instance.getPrivateIpAddress().equals(InetAddress.getLocalHost().getHostAddress())){
+					TalesSystem.instance = instance;
+					return instance;
+				}
+
+			}
+
+		}
+
 		return null;
 
 	}
