@@ -9,6 +9,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 
 import tales.services.Connection;
+import tales.services.Logger;
 import tales.services.Mongo;
 import tales.services.Solr;
 import tales.services.TalesDB;
@@ -25,7 +26,11 @@ public class TemplateDataRemover {
 
 
 	public static void remove(TemplateMetadataInterface metadata){
+		
+		
+		Logger.log(new Throwable(), "removing data");
 
+		
 		// DB
 		try{
 
@@ -62,6 +67,9 @@ public class TemplateDataRemover {
 		}catch(Exception e){
 			new TalesException(new Throwable(), e);
 		}
+		
+		
+		Logger.log(new Throwable(), "finished removing the data");
 
 	}
 

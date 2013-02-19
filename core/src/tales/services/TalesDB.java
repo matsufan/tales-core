@@ -172,13 +172,14 @@ public class TalesDB {
 
 
 	public synchronized final int addDocument(final String name) throws TalesException{
-
+		
+		Jedis redis = null;
 
 		try{
 
 
 			// memcache	
-			final Jedis redis = jedisPool.getResource();
+			redis = jedisPool.getResource();
 			redis.set(dbName + name, Integer.toString(-1));
 
 
@@ -209,8 +210,16 @@ public class TalesDB {
 
 
 		}catch(final Exception e){
+			
 			final String[] args = {name};
 			throw new TalesException(new Throwable(), e, args);
+			
+		}finally{
+			
+			if(redis != null){
+				jedisPool.returnResource(redis);
+			}
+			
 		}
 
 	}
@@ -220,18 +229,27 @@ public class TalesDB {
 
 	public synchronized final boolean documentExists(final String name) throws TalesException{
 
+		Jedis redis = null;
 
 		try {
 
-			final Jedis redis = jedisPool.getResource();
+			redis = jedisPool.getResource();
 			final Boolean result = redis.exists(dbName + name);
 			jedisPool.returnResource(redis);
 
 			return result;
 
 		}catch(final Exception e){
+			
 			final String[] args = {name};
 			throw new TalesException(new Throwable(), e, args);
+			
+		}finally{
+			
+			if(redis != null){
+				jedisPool.returnResource(redis);
+			}
+			
 		}
 
 	}
@@ -280,19 +298,29 @@ public class TalesDB {
 
 	public final int getDocumentId(final String name) throws TalesException{
 
+		Jedis redis = null;
 
 		try{
 
-			final Jedis redis = jedisPool.getResource();
+			redis = jedisPool.getResource();
 			final int result = Integer.parseInt(redis.get(dbName + name));
 			jedisPool.returnResource(redis);
 
 			return result;
 
 		}catch(final Exception e){
+			
 			final String[] args = {name};
 			throw new TalesException(new Throwable(), e, args);
+			
+		}finally{
+			
+			if(redis != null){
+				jedisPool.returnResource(redis);
+			}
+			
 		}
+		
 	}
 
 
