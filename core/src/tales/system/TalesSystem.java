@@ -103,14 +103,14 @@ public class TalesSystem {
 
 		try{
 
-			Exception error = null;
-
 			try{
 				if(TalesSystem.getAWSInstanceMetadata() != null){
 					return TalesSystem.getAWSInstanceMetadata().getPublicDnsName();
 				}	
 			}catch(Exception e){
-				error = e;
+				if(serverIP != null){
+					new TalesException(new Throwable(), e);
+				}
 			}
 
 
@@ -138,10 +138,6 @@ public class TalesSystem {
 
 				}
 
-			}
-			
-			if(error != null){
-				new TalesException(new Throwable(), error);
 			}
 
 			return serverIP;
