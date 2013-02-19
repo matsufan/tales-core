@@ -3,7 +3,7 @@ http://twitter.com/calufa
 http://linkedin.com/in/calufa
 
 ### About Tales
-Tales (http://en.wikipedia.org/wiki/Thales) is a block tolerant (http://en.wikipedia.org/wiki/IP_address_blocking) web scraper (http://en.wikipedia.org/wiki/Web_scraping) that runs on top of aws and rackspace. Tales is design to be easy to deploy, configure, and manage. With Tales you can scrape 10s or even 100s of domains concurrently.
+Tales (http://en.wikipedia.org/wiki/Thales) is a block tolerant (IP Blocking) web scraper (http://en.wikipedia.org/wiki/Web_scraping) that runs on top of aws and rackspace. Tales is design to be easy to deploy, configure, and manage. With Tales you can scrape 10s or even 100s of domains concurrently.
 
 Tales is made in java, javascript/html and uses mysql, redis, and git.
 
@@ -45,6 +45,8 @@ You can also store the data into mongoDB and Solr; which comes prepack in all th
 Tales is design to keep updates of the data that you scrape. For instance, if a twitter user changes his location from "CR" to "SF", Tales will keep "CR" and store "SF"; keeps a log of the changes. 
 
 This is very useful if you want to do regressions, some math, or see how data evolves.
+
+### [Deploying to the Cloud](https://github.com/calufa/tales-core/wiki/Deploying-to-the-Cloud)
 
 ### [How to install Tales](https://github.com/calufa/tales-core/wiki/Installing-Tales-on-Ubuntu-10.04-Lucid)
 
