@@ -474,7 +474,11 @@ public class Config{
 				t.start();
 
 			}catch(Exception e){
-				new TalesException(new Throwable(), e);
+				try{
+					new TalesException(new Throwable(), e);
+				}catch(Exception e1){
+					e.printStackTrace();
+				}
 			}
 
 		}

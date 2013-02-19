@@ -28,13 +28,13 @@ public class Server{
 
 		try{
 
-
-			// wait for mysql to be ready
-			DBUtils.waitUntilMysqlIsReady();
-			
 			
 			// pulls the latest changes from git
 			String pullOutput = GitSync.pull();
+
+			
+			// wait for mysql to be ready
+			DBUtils.waitUntilMysqlIsReady();
 			
 			
 			// compiles
