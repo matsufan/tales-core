@@ -124,11 +124,10 @@ git config --global user.email $email > /dev/null 2>&1
 # cloning repos
 cd $HOME
 
-echo ""
-echo "Cloning tales-core from '"$core"'"
-
 echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config # prevents git for asking "Are you sure you want to continue connecting (yes/no)?"
 
+echo ""
+echo "Cloning tales-core from '"$core"'"
 git clone $core "tales-core" > /dev/null 2>&1
 cd ~
 cd tales-core/core
