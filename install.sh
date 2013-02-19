@@ -13,6 +13,10 @@ read -p "2. What's your tales-templates repo path, e.g. 'git@github.com:calufa/t
 read -p "3. What's your github email address? " email
 read -p "4. What's your github username? " name
 read -p "5. Please specify the mysql username, e.g 'root'? " user
+
+echo "Note: if you sumitted 'git@github.com:calufa/tales-templates-sample.git' as the tales-templates repo"
+echo "then you should use the default password '123456789-ABCDED' (no quotes),"
+echo "as specified in the config file at this url https://github.com/calufa/tales-templates-sample/blob/master/environments/master.json#L30 "
 read -p "6. Please specify the mysql password? " password
 
 
