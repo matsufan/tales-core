@@ -109,9 +109,7 @@ public class TalesSystem {
 					return TalesSystem.getAWSInstanceMetadata().getPublicDnsName();
 				}	
 			}catch(Exception e){
-				if(serverIP != null){
-					new TalesException(new Throwable(), e);
-				}
+				e.printStackTrace();
 			}
 
 
