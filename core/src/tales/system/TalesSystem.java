@@ -212,11 +212,11 @@ public class TalesSystem {
 				
 			}
 
-			return null;
-
 		}catch( Exception e){
-			throw new TalesException(new Throwable(), e);
+			new TalesException(new Throwable(), e);
 		}
+		
+		return null;
 
 	}
 
