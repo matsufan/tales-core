@@ -112,6 +112,7 @@ public class TalesSystem {
 			}catch(Exception e){}
 
 
+			// if its not aws
 			if (serverIP == null) {
 
 				serverIP = InetAddress.getLocalHost().getHostAddress();
