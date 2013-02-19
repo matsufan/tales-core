@@ -213,7 +213,7 @@ public class TalesSystem {
 			}
 
 		}catch( Exception e){
-			new TalesException(new Throwable(), e);
+			e.printStackTrace();
 		}
 		
 		return null;
