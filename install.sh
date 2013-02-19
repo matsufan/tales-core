@@ -1,7 +1,3 @@
-path=$HOME"/.ssh/id_rsa"
-
-
-# hello
 echo ""
 echo "T.A.L.E.S Installer"
 echo ""
@@ -55,6 +51,8 @@ done
 echo ""
 echo "Generating ssh-key..."
 echo ""
+
+path=$HOME"/.ssh/id_rsa"
 ssh-keygen -f $path -N "" -t rsa -C $email > /dev/null 2>&1
 
 
