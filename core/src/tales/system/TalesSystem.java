@@ -213,10 +213,8 @@ public class TalesSystem {
 			}
 
 		}catch( Exception e){
-			new TalesException(new Throwable(), e);
+			return null;
 		}
-		
-		return null;
 
 	}
 
