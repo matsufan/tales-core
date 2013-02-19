@@ -71,17 +71,18 @@ done
 # installing dependencies
 echo ""
 echo "Installing dependencies... this can take a while..."
+echo ""
 
 export DEBIAN_FRONTEND=noninteractive # prevents mysql prompt
-sudo apt-get -q -y update > /dev/null 2>&1
-sudo apt-get -q -y install openjdk-6-jdk openjdk-6-jre-headless openjdk-6-jre-lib build-essential g++ libssl-dev git-core libxml2 libxml2-dev scons ant screen apache2 munin munin-node munin-java-plugins munin-plugins-extra curl > /dev/null 2>&1
-sudo apt-get -q -y install mysql-server > /dev/null 2>&1
+sudo apt-get -q -y update
+sudo apt-get -q -y install openjdk-6-jdk openjdk-6-jre-headless openjdk-6-jre-lib build-essential g++ libssl-dev git-core libxml2 libxml2-dev scons ant screen apache2 munin munin-node munin-java-plugins munin-plugins-extra curl
+sudo apt-get -q -y install mysql-server
 #redis
 cd ~ 
-wget http://redis.googlecode.com/files/redis-2.6.8.tar.gz > /dev/null 2>&1
-tar xzf redis-2.6.8.tar.gz > /dev/null 2>&1
+wget http://redis.googlecode.com/files/redis-2.6.8.tar.gz
+tar xzf redis-2.6.8.tar.gz
 cd redis-2.6.8
-make > /dev/null 2>&1
+make
 cd ../ 
 mv redis-2.6.8 redis
 
@@ -111,7 +112,7 @@ cd tales-templates/core
 ant > /dev/null 2>&1
 
 # setting up mysql passwords
-mysql -u $user -e "GRANT ALL PRIVILEGES ON *.* TO 'root@'%' IDENTIFIED BY '"$password"' WITH GRANT OPTION; GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '"$password"' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+mysql -u $user -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '"$password"' WITH GRANT OPTION; GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '"$password"' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 
 
 # iptables

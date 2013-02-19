@@ -186,7 +186,7 @@ public class TalesSystem {
 
 
 
-	public static Instance getAWSInstanceMetadata() throws TalesException{
+	public static Instance getAWSInstanceMetadata(){
 
 		try{
 
@@ -213,9 +213,10 @@ public class TalesSystem {
 			}
 
 		}catch( Exception e){
-			return null;
+			e.printStackTrace(); // no talesexception of recursion problem
 		}
 
+		return null;
 	}
 
 
