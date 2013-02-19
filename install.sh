@@ -98,7 +98,7 @@ echo mysql-server mysql-server/root_password_again select $password | debconf-se
 sudo apt-get -q -y update
 sudo apt-get -q -y install mysql-server openjdk-6-jdk openjdk-6-jre-headless openjdk-6-jre-lib build-essential g++ libssl-dev git-core libxml2 libxml2-dev scons ant screen apache2 munin munin-node munin-java-plugins munin-plugins-extra curl
 #redis
-cd ~ 
+cd $HOME 
 wget http://redis.googlecode.com/files/redis-2.6.8.tar.gz
 tar xzf redis-2.6.8.tar.gz
 cd redis-2.6.8
@@ -122,19 +122,17 @@ git config --global user.email $email > /dev/null 2>&1
 
 
 # cloning repos
-cd $HOME
-
 echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config # prevents git for asking "Are you sure you want to continue connecting (yes/no)?"
 
 echo ""
 echo "Cloning tales-core from '"$core"'"
 git clone $core "tales-core" > /dev/null 2>&1
-cd ~
+cd $HOME
 cd tales-core/core
 ant > /dev/null 2>&1
 
 echo "Cloning tales-templates from '"$templates"'"
-cd ~
+cd $HOME
 git clone $templates "tales-templates" > /dev/null 2>&1
 cd tales-templates/core
 ant > /dev/null 2>&1
