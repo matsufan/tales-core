@@ -7,7 +7,7 @@ Tales (http://en.wikipedia.org/wiki/Thales) is a block tolerant (IP Blocking) we
 
 Tales is made in java, javascript/html and uses mysql, redis, and git.
 
-Tales is simple, light, reliable, and has been tested on production environments scraping more than 200 million urls. 
+Tales is simple, light, reliable, easy to install, and has been tested on production environments scraping more than 200 million urls. 
 
 With Tales you can do web monitoring, research, aggregators, etc.
 
