@@ -46,7 +46,7 @@ Tales is design to keep updates of the data that you scrape. For instance, if a 
 
 This is very useful if you want to do regressions, some math, or see how data evolves.
 
-### [Deploying to the Cloud](https://github.com/calufa/tales-core/wiki/Deploying-to-the-Cloud)
+### [Deploying Tales into the Cloud](https://github.com/calufa/tales-core/wiki/Deploying-Tales-into-to-the-Cloud)
 
 ### [How to install Tales](https://github.com/calufa/tales-core/wiki/Installing-Tales-on-Ubuntu-10.04-Lucid)
 
