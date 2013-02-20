@@ -21,7 +21,7 @@ Tales is design to scrape the web continuously, even when the domain being scrap
 
 Its very easy to code the scraper instructions, also called Templates. Once the templates are ready, all you need to do is push the code into git (git push origin), and the nodes alive will grab the code and recompile themselves.
 
-Tales uses JSoup as the html parsing library. JSoup gives a nice way to extract content from html, similar to what you are use when navigate the dom using Jquery, e.g.
+Tales uses JSoup as the html parsing library. JSoup gives a nice way to extract content from html, similar to what you are used when navigating the dom using Jquery, e.g.
 
 <pre>
 public TwitterUser parse(Document doc){
