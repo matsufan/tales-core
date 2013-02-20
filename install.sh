@@ -44,10 +44,10 @@ if [ "$templates" == "git@github.com:calufa/tales-templates-sample.git" ]; then
 else
   
   echo ""
-  echo "Note: the mysql user must match with the dbUsername found in the configuration file located at '~/tales-templates/environments/'"
+  echo "Note: the mysql user must match with the dbUsername found in the configuration file located at '~/tales-templates/environments/master.json'"
   read -p "6. Please specify the mysql username? " user
   echo ""
-  echo "Note: the mysql password must match with the dbPassword found in the configuration file located at '~/tales-templates/environments/'"
+  echo "Note: the mysql password must match with the dbPassword found in the configuration file located at '~/tales-templates/environments/master.json'"
   read -p "7. Please specify the mysql password? " password
   
 fi
