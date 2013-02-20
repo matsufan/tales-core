@@ -48,8 +48,6 @@ This is very useful if you want to do regressions, some math, or see how data ev
 
 ### [Deploying Tales into the Cloud](https://github.com/calufa/tales-core/wiki/Deploying-Tales-into-to-the-Cloud)
 
-### [How to install Tales](https://github.com/calufa/tales-core/wiki/Installing-Tales-on-Ubuntu-10.04-Lucid)
-
 ### [Tales workflow sample](https://github.com/calufa/tales-core/wiki/Tales-workflow-sample)
 
 ### [Template structure](https://github.com/calufa/tales-core/wiki/About-templates)
