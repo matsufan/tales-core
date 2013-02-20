@@ -12,7 +12,8 @@ while true; do
     echo "1. First, replace the host names (dashboardURL, logDB, dataDB, tasksDB, redisHost, solrHost and mongoHost)"
     echo "   in the config file (located at ~/tales-templates/environments/master.json) so it matches"
     echo "   this server public dns address (for example, 53.45.32.11, or ec2-23-20-25-203.compute-1.amazonaws.com)."
-    read -p "  Let me know when you are done by typing 'done'? " done
+    echo ""
+    read -p "   Let me know when you are done by typing 'done'? " done
     case $done in
       [done]* ) break;;
       * ) echo "    Please answer 'done' (no quotes)";;
