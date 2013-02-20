@@ -173,13 +173,6 @@ public class TalesDB {
 
 	public synchronized final int addDocument(final String name) throws TalesException{
 		
-		
-		if(name.length() > Globals.DOCUMENT_NAME_MAX_SIZE){
-			final String[] args = {name, "name too long, maxsize: " + Globals.DOCUMENT_NAME_MAX_SIZE};
-			throw new TalesException(new Throwable(), args);
-		}
-		
-		
 		Jedis redis = null;
 
 		try{
@@ -234,13 +227,6 @@ public class TalesDB {
 
 
 	public synchronized final boolean documentExists(final String name) throws TalesException{
-		
-		
-		if(name.length() > Globals.DOCUMENT_NAME_MAX_SIZE){
-			final String[] args = {name, "name too long, maxsize: " + Globals.DOCUMENT_NAME_MAX_SIZE};
-			throw new TalesException(new Throwable(), args);
-		}
-
 		
 		Jedis redis = null;
 
@@ -884,7 +870,7 @@ public class TalesDB {
 			tbName              = tbName.replace(".", "_");
 
 			final Statement statement = (Statement) conn.createStatement();
-			statement.executeUpdate("CREATE TABLE " + tbName + " (id INT NOT NULL AUTO_INCREMENT, documentId INT NOT NULL, data VARCHAR( " + Globals.DOCUMENT_NAME_MAX_SIZE + " ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL, added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id), KEY documentId (documentId)) ENGINE = MYISAM DEFAULT CHARSET=utf8");
+			statement.executeUpdate("CREATE TABLE " + tbName + " (id INT NOT NULL AUTO_INCREMENT, documentId INT NOT NULL, data VARCHAR(2000) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL, added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id), KEY documentId (documentId)) ENGINE = MYISAM DEFAULT CHARSET=utf8");
 			statement.executeUpdate("OPTIMIZE TABLE " + tbName);
 			statement.close();
 

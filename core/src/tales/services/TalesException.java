@@ -28,13 +28,4 @@ public class TalesException extends Exception {
 		} catch (Exception j) {}
     }
     
-    
-    
-    
-    public TalesException(Throwable origin, String args[]){
-		try {
-        	Logger.error(origin, new Exception());
-        } catch (Exception j) {}
-    }
-    
 }

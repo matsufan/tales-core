@@ -30,7 +30,5 @@ public class Globals {
 	
 	public static String WEB_DIR                         = System.getProperty("user.home") + "/tales-core/core/web";
 	public static String WEB_DASHBOARD                   = "dashboard.html";
-	
-	public static int DOCUMENT_NAME_MAX_SIZE             = 2000;
 		
 }
