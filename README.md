@@ -23,7 +23,7 @@ Its very easy to code the scraper instructions, also called Templates. Once the 
 
 Tales uses JSoup as the html parsing library. JSoup gives a nice way to extract content from html, similar to what you are use when navigate the dom using Jquery, e.g.
 
-</pre>
+<pre>
 public TwitterUser parse(Document doc){
         
   TwitterUser obj = new TwitterUser();
