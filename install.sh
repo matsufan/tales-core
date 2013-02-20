@@ -21,6 +21,7 @@ while true; do
 done
 
 # asks for the user data
+echo ""
 echo "Note: if you want to experiment with Tales, you can use the main repo 'git@github.com:calufa/tales-core.git' as the tales-core path."
 read -p "2. What's your tales-core repo path: " core
 echo ""
