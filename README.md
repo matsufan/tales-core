@@ -21,6 +21,35 @@ Tales is design to scrape the web continuously, even when the domain being scrap
 
 Its very easy to code the scraper instructions, also called Templates. Once the templates are ready, all you need to do is push the code into git (git push origin), and the nodes alive will grab the code and recompile themselves.
 
+Tales uses JSoup as the html parsing library. JSoup gives a nice way to extract content from html, similar to what you are use when navigate the dom using Jquery, e.g.
+
+</pre>
+public TwitterUser parse(Document doc){
+        
+  TwitterUser obj = new TwitterUser();
+  obj.username = doc.select(".screen-name").text();
+  obj.fullname = doc.select(".fullname").text();
+  obj.bio = doc.select(".bio").text();
+        
+  return obj;
+
+}
+
+// local testing and debugging
+public static void main(String[] args) throws DownloadException {
+
+  String url = "https://twitter.com/Werner";
+
+  Download download = new Download();
+  String html = download.getURLContent(url);
+  Document doc = Jsoup.parse(html);
+
+  TwitterParser parser = new TwitterParser();
+  parser.parse(doc);
+
+}
+</pre>
+
 You can also have several branches (git) with different configurations and templates -- environments. This gives you the ability of running tests in a separate set of servers.
 
 ### Management
